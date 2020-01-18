@@ -125,13 +125,11 @@ router.get('/feed', auth.required, function(req, res, next) {
 router.post('/', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if (!user) { return res.sendStatus(401); }
-
     var article = new Article(req.body.article);
-
     article.author = user;
 
     return article.save().then(function(){
-      console.log(article.author);
+      console.log(article);
       return res.json({article: article.toJSONFor(user)});
     });
   }).catch(next);
@@ -153,21 +151,71 @@ router.get('/:article', auth.optional, function(req, res, next) {
 router.put('/:article', auth.required, function(req, res, next) {
   User.findById(req.payload.id).then(function(user){
     if(req.article.author._id.toString() === req.payload.id.toString()){
+
+      if(typeof req.body.article.intNomer !== 'undefined'){
+        req.article.intNomer = req.body.article.intNomer;
+      }
+      if(typeof req.body.article.id !== 'undefined'){
+        req.article.id = req.body.article.id;
+      }
       if(typeof req.body.article.title !== 'undefined'){
         req.article.title = req.body.article.title;
       }
-
+      if(typeof req.body.article.source !== 'undefined'){
+        req.article.source = req.body.article.source;
+      }
+      if(typeof req.body.article.type !== 'undefined'){
+        req.article.type = req.body.article.type;
+      }
+      if(typeof req.body.article.ownType !== 'undefined'){
+        req.article.ownType = req.body.article.ownType;
+      }
+      if(typeof req.body.article.date !== 'undefined'){
+        req.article.date = req.body.article.date;
+      }
+      if(typeof req.body.article.seller !== 'undefined'){
+        req.article.seller = req.body.article.seller;
+      }
+      if(typeof req.body.article.sellerPhone !== 'undefined'){
+        req.article.sellerPhone = req.body.article.sellerPhone;
+      }
+      if(typeof req.body.article.sellerCard !== 'undefined'){
+        req.article.sellerCard = req.body.article.sellerCard;
+      }
+      if(typeof req.body.article.sellerData !== 'undefined'){
+        req.article.sellerData = req.body.article.sellerData;
+      }
+      if(typeof req.body.article.findPlace !== 'undefined'){
+        req.article.findPlace = req.body.article.findPlace;
+      }
+      if(typeof req.body.article.gps !== 'undefined'){
+        req.article.gps = req.body.article.gps;
+      }
+      if(typeof req.body.article.UAH !== 'undefined'){
+        req.article.UAH = req.body.article.UAH;
+      }
+      if(typeof req.body.article.bids !== 'undefined'){
+        req.article.bids = req.body.article.bids;
+      }
+      if(typeof req.body.article.forumLink !== 'undefined'){
+        req.article.forumLink = req.body.article.forumLink;
+      }
+      if(typeof req.body.article.itemInfo !== 'undefined'){
+        req.article.itemInfo = req.body.article.itemInfo;
+      }
+      if(typeof req.body.article.title !== 'undefined'){
+        req.article.title = req.body.article.title;
+      }
       if(typeof req.body.article.description !== 'undefined'){
         req.article.description = req.body.article.description;
       }
-
       if(typeof req.body.article.body !== 'undefined'){
         req.article.body = req.body.article.body;
       }
-
       if(typeof req.body.article.tagList !== 'undefined'){
         req.article.tagList = req.body.article.tagList
       }
+
 
       req.article.save().then(function(article){
         return res.json({article: article.toJSONFor(user)});
