@@ -1,6 +1,8 @@
 var http = require('http'),
     path = require('path'),
     methods = require('methods'),
+    mysql = require('mysql'),
+
     express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
@@ -8,13 +10,31 @@ var http = require('http'),
     passport = require('passport'),
     errorhandler = require('errorhandler'),
     mongoose = require('mongoose');
+    const items = require('./routes/items');
+    const sellers = require('./routes/sellers');
+    const statuses = require('./routes/statuses');
+    const types = require('./routes/types');
+
 
 var isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 var app = express();
 
+const connection = mysql.createConnection({
+  // host     : 'localhost:8889',
+  host     : 'localhost',
+  user     : 'evaluateme_admin',
+  password : 'evaluateme_admin',
+  database : 'antik_db'
+});
+connection.connect();
+
 app.use(cors());
+app.use(items(connection));
+app.use(sellers(connection));
+app.use(statuses(connection));
+app.use(types(connection));
 
 // Normal express config defaults
 app.use(require('morgan')('dev'));
@@ -52,7 +72,6 @@ app.use(function(req, res, next) {
 });
 
 /// error handlers
-
 // development error handler
 // will print stacktrace
 if (!isProduction) {
@@ -77,6 +96,7 @@ app.use(function(err, req, res, next) {
     error: {}
   }});
 });
+
 
 // finally, let's start our server...
 var server = app.listen( process.env.PORT || 3000, function(){
