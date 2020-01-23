@@ -1,9 +1,10 @@
 const express = require('express');
+var router = require('express').Router();
 
 function createRouter(db) {
   const router = express.Router();
 
-  router.post('/items', (req, res, next) => {
+  router.post('/api/items', (req, res, next) => {
     // const owner = req.user.email;
     db.query(
       'INSERT INTO items () VALUES ()',
@@ -19,8 +20,9 @@ function createRouter(db) {
     );
   });
 
-  router.get('/items', function (req, res, next) {
+  router.get('/api/items', function (req, res, next) {
     // const owner = req.user.email;
+      //console.log('SELECT * FROM Items');
     db.query(
       'SELECT * FROM Items',
       // [owner, 10*(req.params.page || 0)],
@@ -35,7 +37,7 @@ function createRouter(db) {
     );
   });
 
-  router.put('/items/:id', function (req, res, next) {
+  router.put('/api/items/:id', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
       'UPDATE items SET name=?, description=?, date=? WHERE id=? AND owner=?',
@@ -50,7 +52,7 @@ function createRouter(db) {
     );
   });
 
-  router.delete('/event/:id', function (req, res, next) {
+  router.delete('/api/items/:id', function (req, res, next) {
     const owner = req.user.email;
     db.query(
       'DELETE FROM items WHERE id=?',

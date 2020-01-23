@@ -10,10 +10,10 @@ var http = require('http'),
     passport = require('passport'),
     errorhandler = require('errorhandler'),
     mongoose = require('mongoose');
-    // const items = require('./routes/items');
-    // const sellers = require('./routes/sellers');
-    // const statuses = require('./routes/statuses');
-    // const types = require('./routes/types');
+    const items = require('./routes/api/items');
+    const sellers = require('./routes/api/sellers');
+    const statuses = require('./routes/api/statuses');
+    const types = require('./routes/api/types');
 
 
 var isProduction = process.env.NODE_ENV === 'production';
@@ -21,19 +21,19 @@ var isProduction = process.env.NODE_ENV === 'production';
 // Create global app object
 var app = express();
 
-// const connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'evaluateme_admin',
-//   password : 'evaluateme_admin',
-//   database : 'antik_db'
-// });
-// connection.connect();
+const connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'evaluateme_admin',
+  password : 'evaluateme_admin',
+  database : 'antik_db'
+});
+connection.connect();
 
 app.use(cors());
-// app.use(items(connection));
-// app.use(sellers(connection));
-// app.use(statuses(connection));
-// app.use(types(connection));
+app.use(items(connection));
+app.use(sellers(connection));
+app.use(statuses(connection));
+app.use(types(connection));
 
 // Normal express config defaults
 app.use(require('morgan')('dev'));

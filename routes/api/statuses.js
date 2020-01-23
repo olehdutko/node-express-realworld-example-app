@@ -2,10 +2,10 @@ const express = require('express');
 
 function createRouter(db) {
   const router = express.Router();
-  router.post('/sellers', (req, res, next) => {
+  router.post('/api/statuses', (req, res, next) => {
     // const owner = req.user.email;
     db.query(
-      'INSERT INTO sellers () VALUES (?,?,?)',
+      'INSERT INTO statuses () VALUES (?,?,?)',
       [owner, req.body.name, req.body.description, new Date(req.body.date)],
       (error) => {
         if (error) {
@@ -18,11 +18,11 @@ function createRouter(db) {
     );
   });
 
-  router.get('/sellers', function (req, res, next) {
+  router.get('/api/statuses', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
       // 'SELECT id, name, description, date FROM events WHERE owner=? ORDER BY date LIMIT 10 OFFSET ?',
-      'SELECT * FROM sellers',
+      'SELECT * FROM statuses',
       // [owner, 10*(req.params.page || 0)],
       (error, results) => {
         if (error) {
@@ -35,10 +35,10 @@ function createRouter(db) {
     );
   });
 
-  router.put('/sellers/:id', function (req, res, next) {
+  router.put('/api/statuses/:id', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
-      'UPDATE sellers SET name=?, description=?, date=? WHERE id=?',
+      'UPDATE statuses SET name=?, description=?, date=? WHERE id=?',
       [req.body.name, req.body.description, new Date(req.body.date), req.params.id],
       (error) => {
         if (error) {
@@ -50,10 +50,10 @@ function createRouter(db) {
     );
   });
 
-  router.delete('/sellers/:id', function (req, res, next) {
+  router.delete('/api/statuses/:id', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
-      'DELETE FROM sellers WHERE id=?',
+      'DELETE FROM statuses WHERE id=?',
       // [req.params.id, owner],
       (error) => {
         if (error) {

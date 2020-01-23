@@ -2,12 +2,11 @@ const express = require('express');
 
 function createRouter(db) {
   const router = express.Router();
-
-  router.post('/items', (req, res, next) => {
+  router.post('/api/types', (req, res, next) => {
     // const owner = req.user.email;
     db.query(
-      'INSERT INTO items () VALUES ()',
-      [],
+      'INSERT INTO types () VALUES (?,?,?)',
+      [owner, req.body.name, req.body.description, new Date(req.body.date)],
       (error) => {
         if (error) {
           console.error(error);
@@ -19,10 +18,11 @@ function createRouter(db) {
     );
   });
 
-  router.get('/items', function (req, res, next) {
+  router.get('/api/types', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
-      'SELECT * FROM Items',
+      // 'SELECT id, name, description, date FROM events WHERE owner=? ORDER BY date LIMIT 10 OFFSET ?',
+      'SELECT * FROM types',
       // [owner, 10*(req.params.page || 0)],
       (error, results) => {
         if (error) {
@@ -35,10 +35,10 @@ function createRouter(db) {
     );
   });
 
-  router.put('/items/:id', function (req, res, next) {
+  router.put('/api/types/:id', function (req, res, next) {
     // const owner = req.user.email;
     db.query(
-      'UPDATE items SET name=?, description=?, date=? WHERE id=? AND owner=?',
+      'UPDATE types SET name=?, description=?, date=? WHERE id=?',
       [req.body.name, req.body.description, new Date(req.body.date), req.params.id],
       (error) => {
         if (error) {
@@ -50,11 +50,11 @@ function createRouter(db) {
     );
   });
 
-  router.delete('/event/:id', function (req, res, next) {
-    const owner = req.user.email;
+  router.delete('/api/types/:id', function (req, res, next) {
+    // const owner = req.user.email;
     db.query(
-      'DELETE FROM items WHERE id=?',
-      [req.params.id],
+      'DELETE FROM types WHERE id=?',
+      // [req.params.id, owner],
       (error) => {
         if (error) {
           res.status(500).json({status: 'error'});
