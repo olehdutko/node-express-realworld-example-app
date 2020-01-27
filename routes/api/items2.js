@@ -1,5 +1,8 @@
 const express = require('express');
 var router = require('express').Router();
+var Article = mongoose.model('Item');
+var Comment = mongoose.model('Comment');
+var User = mongoose.model('User');
 var auth = require('../auth');
 
 // Preload article objects on routes with ':article'
@@ -29,20 +32,7 @@ router.param('comment', function(req, res, next, id) {
 function createRouter(db) {
   const router = express.Router();
 
-    // Preload article objects on routes with ':article'
-    router.param('article', function(req, res, next, slug) {
-        Article.findOne({ id: id})
-            .populate('author')
-            .then(function (article) {
-                if (!article) { return res.sendStatus(404); }
-
-                req.article = article;
-
-                return next();
-            }).catch(next);
-    });
-
-    router.post('/api/items', (req, res, next) => {
+  router.post('/api/items', (req, res, next) => {
     // const owner = req.user.email;
     db.query(
       'INSERT INTO items () VALUES ()',
@@ -97,34 +87,6 @@ function createRouter(db) {
 
 
   });
-
-    router.get('/api/items/:itemId', function (req, res) {
-        // Access userId via: req.params.userId
-        // Access bookId via: req.params.bookId
-        // res.send(req.params);
-        db.query(
-            'SELECT * FROM Items WHERE id= '+req.params.itemId,
-            // [owner, 10*(req.params.page || 0)],
-
-            (error, results) => {
-                if (error) {
-                    console.log(error);
-                    res.status(500).json({status: 'error'});
-                } else {
-
-                    results[0]['author'] = {
-                        "username": "odutko",
-                        "bio": "",
-                        "image": "https://findicons.com/files/icons/1200/indiana_jones_and_the_last_crusade/128/grail_tablet.png",
-                        "following": false
-                    };
-                    res.status(200).json({
-                            "item": results[0]
-                    });
-                }
-            }
-        );
-    })
 
   router.put('/api/items/:id', function (req, res, next) {
     // const owner = req.user.email;
